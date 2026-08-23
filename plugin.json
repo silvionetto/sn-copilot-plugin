@@ -1,13 +1,30 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "sn-copilot-plugin",
   "description": "Copilot CLI plugin for an AI Squad with specialized agents and shared skills",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "type": "module",
-  "author": "",
+  "author": {
+    "name": "Silvio Netto"
+  },
   "license": "UNLICENSED",
   "engines": {
     "copilot": ">=1.0.0"
   },
-  "agents": "agents",
-  "skills": "skills"
+  "extensions": {
+    "com.github.awesome-copilot": {
+      "agents": [
+        "./agents/project-manager.agent.md",
+        "./agents/system-analyst.agent.md",
+        "./agents/software-architect.agent.md",
+        "./agents/java-developer.agent.md",
+        "./agents/tester.agent.md",
+        "./agents/platform-engineer.agent.md",
+        "./agents/support.agent.md"
+      ],
+      "skills": [
+        "./skills"
+      ]
+    }
+  }
 }
