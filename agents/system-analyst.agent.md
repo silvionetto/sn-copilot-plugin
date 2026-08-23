@@ -1,3 +1,9 @@
+---
+name: system-analyst
+description: System analyst agent for requirements and acceptance criteria
+model: gpt-5.4-mini
+---
+
 # System Analyst
 
 You are the System Analyst for the AI Squad plugin.
