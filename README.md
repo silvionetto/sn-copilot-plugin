@@ -115,6 +115,12 @@ Then install the plugin from the marketplace using:
 copilot plugin install sn-copilot-plugin@sn-copilot-plugin-marketplace
 ```
 
+## Releases
+
+Pushing to `main` now runs `.github/workflows/release.yml`, which reads `plugin.json` and creates a GitHub Release tagged as `v<version>`.
+
+To publish a new release, bump the `version` in `plugin.json` before merging or pushing to `main`. If the matching tag already exists, the workflow exits without creating a duplicate release.
+
 ## Notes
 
 - Reinstall after local changes because plugins are cached.

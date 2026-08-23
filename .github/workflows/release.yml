@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Read plugin version
+        id: plugin
+        shell: bash
+        run: |
+          version=$(python -c "import json, pathlib; print(json.loads(pathlib.Path('plugin.json').read_text())['version'])")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+
+      - name: Verify release tag does not already exist
+        shell: bash
+        run: |
+          if git rev-parse "${{ steps.plugin.outputs.tag }}" >/dev/null 2>&1; then
+            echo "Release tag ${{ steps.plugin.outputs.tag }} already exists."
+            exit 0
+          fi
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.plugin.outputs.tag }}
+          name: ${{ steps.plugin.outputs.tag }}
+          generate_release_notes: true
+          target_commitish: ${{ github.sha }}
