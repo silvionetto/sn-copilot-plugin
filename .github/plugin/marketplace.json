@@ -1,6 +1,6 @@
 {
   "name": "sn-copilot-plugin",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Copilot CLI plugin for an AI Squad with specialized agents and shared skills",
   "extensions": {
     "com.github.awesome-copilot": {

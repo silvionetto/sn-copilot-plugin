@@ -69,7 +69,7 @@ Each specialist should hand off a compact result with objective, assumptions, fi
 
 - **Name:** `sn-copilot-plugin`
 - **Description:** Copilot CLI plugin for an AI Squad with specialized agents and shared skills
-- **Version:** `0.1.4`
+- **Version:** `0.1.10`
 - **License:** `UNLICENSED`
 - **Copilot engine:** `>=1.0.0`
 
@@ -125,6 +125,17 @@ copilot plugin install sn-copilot-plugin@sn-copilot-plugin-marketplace
 Pushing to `main` now runs `.github/workflows/release.yml`, which reads `plugin.json` and creates a GitHub Release tagged as `v<version>`.
 
 To publish a new release, bump the `version` in `plugin.json` before merging or pushing to `main`. If the matching tag already exists, the workflow exits without creating a duplicate release.
+
+## Validation workflow
+
+Pull requests and pushes to `main` now run `.github/workflows/validate-plugin.yml` to catch manifest and documentation drift before release.
+
+The workflow verifies:
+
+- `plugin.json` and `.github/plugin/marketplace.json` stay in sync
+- every `agents/*.agent.md` file is documented in the `/agent` list
+- the README manifest version matches `plugin.json`
+- the documented discovery path still references `.github/agents`
 
 ## Notes
 

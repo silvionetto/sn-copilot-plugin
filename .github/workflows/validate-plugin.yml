@@ -1,0 +1,93 @@
+name: Validate Plugin
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Validate manifests and documentation
+        shell: bash
+        run: |
+          python <<'PY'
+          import json
+          import pathlib
+          import re
+          import sys
+
+          root = pathlib.Path(".")
+          plugin_path = root / "plugin.json"
+          marketplace_path = root / ".github" / "plugin" / "marketplace.json"
+          readme_path = root / "README.md"
+          agents_dir = root / "agents"
+
+          plugin = json.loads(plugin_path.read_text(encoding="utf-8"))
+          marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
+          readme = readme_path.read_text(encoding="utf-8")
+
+          errors = []
+
+          if plugin.get("version") != marketplace.get("version"):
+              errors.append(
+                  f"Version mismatch: plugin.json={plugin.get('version')} "
+                  f"marketplace.json={marketplace.get('version')}"
+              )
+
+          plugin_extension = plugin.get("extensions", {}).get("com.github.awesome-copilot", {})
+          marketplace_extension = marketplace.get("extensions", {}).get("com.github.awesome-copilot", {})
+
+          if plugin_extension != marketplace_extension:
+              errors.append("Extension registration differs between plugin.json and marketplace.json")
+
+          if plugin_extension.get("agents") != ["agents/"]:
+              errors.append("plugin.json must register agents/ as the agent discovery path")
+
+          if plugin_extension.get("skills") != ["skills/"]:
+              errors.append("plugin.json must register skills/ as the skill discovery path")
+
+          agent_files = sorted(path.name for path in agents_dir.glob("*.agent.md"))
+          if not agent_files:
+              errors.append("No agent files found under agents/")
+
+          missing_agent_commands = []
+          for agent_file in agent_files:
+              agent_name = agent_file.replace(".agent.md", "")
+              command = f"/agent {agent_name}"
+              if command not in readme:
+                  missing_agent_commands.append(command)
+
+          if missing_agent_commands:
+              errors.append(
+                  "README.md is missing agent command entries: " + ", ".join(missing_agent_commands)
+              )
+
+          version_match = re.search(r"- \*\*Version:\*\* `([^`]+)`", readme)
+          if not version_match:
+              errors.append("README.md is missing the Current manifest version line")
+          elif version_match.group(1) != plugin.get("version"):
+              errors.append(
+                  f"README.md version {version_match.group(1)} does not match plugin.json version {plugin.get('version')}"
+              )
+
+          if ".github/agents" not in readme:
+              errors.append("README.md must document .github/agents as the discovery path")
+
+          if errors:
+              for error in errors:
+                  print(f"ERROR: {error}")
+              sys.exit(1)
+
+          print(f"Validated {len(agent_files)} agents, manifest parity, and README consistency.")
+          PY
