@@ -65,7 +65,7 @@ Each specialist should hand off a compact result with objective, assumptions, fi
 
 - **Name:** `sn-copilot-plugin`
 - **Description:** Copilot CLI plugin for an AI Squad with specialized agents and shared skills
-- **Version:** `0.1.3`
+- **Version:** `0.1.4`
 - **License:** `UNLICENSED`
 - **Copilot engine:** `>=1.0.0`
 
@@ -98,6 +98,22 @@ copilot plugin list
 ```
 
 Repository-level custom agent discovery is based on `.github/agents`, so opening Copilot CLI in this repository is what makes the agents appear in `/agent`.
+
+## Marketplace
+
+This repository now includes a marketplace manifest at `.github/plugin/marketplace.json`.
+
+You can register it with Copilot CLI using:
+
+```shell
+copilot plugin marketplace add silvionetto/sn-copilot-plugin
+```
+
+Then install the plugin from the marketplace using:
+
+```shell
+copilot plugin install sn-copilot-plugin@sn-copilot-plugin-marketplace
+```
 
 ## Notes
 

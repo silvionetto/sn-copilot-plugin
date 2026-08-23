@@ -1,0 +1,18 @@
+{
+  "name": "sn-copilot-plugin-marketplace",
+  "owner": {
+    "name": "Silvio Netto"
+  },
+  "metadata": {
+    "description": "Marketplace for the sn-copilot-plugin AI Squad Copilot CLI plugin",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "sn-copilot-plugin",
+      "description": "Copilot CLI plugin for an AI Squad with specialized agents and shared skills",
+      "version": "0.1.4",
+      "source": "."
+    }
+  ]
+}
