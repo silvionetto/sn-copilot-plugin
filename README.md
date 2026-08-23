@@ -17,6 +17,15 @@ Copilot CLI plugin for an **AI Squad** with specialized agents and optional shar
 ```text
 sn-copilot-plugin/
 ├── plugin.json
+├── .github/
+│   └── agents/
+│       ├── project-manager.agent.md
+│       ├── system-analyst.agent.md
+│       ├── software-architect.agent.md
+│       ├── java-developer.agent.md
+│       ├── tester.agent.md
+│       ├── platform-engineer.agent.md
+│       └── support.agent.md
 ├── agents/
 │   ├── project-manager.agent.md
 │   ├── system-analyst.agent.md
@@ -30,7 +39,7 @@ sn-copilot-plugin/
 
 ## Implementation guidance
 
-1. Add one `.agent.md` file per role under `agents/`.
+1. Add one `.agent.md` file per role under `.github/agents/`.
 2. Use the Project Manager as the default entry point.
 3. Keep role boundaries narrow so analysis, architecture, implementation, testing, platform, and support stay distinct.
 4. Add shared skills only when multiple agents need the same prompt logic.
@@ -70,7 +79,7 @@ Each specialist should hand off a compact result with objective, assumptions, fi
 
 ## Agents
 
-This plugin exposes these agents to Copilot CLI:
+This repo exposes these agents to Copilot CLI through the documented repository-level agent location:
 
 - `/agent project-manager`
 - `/agent system-analyst`
@@ -80,7 +89,7 @@ This plugin exposes these agents to Copilot CLI:
 - `/agent platform-engineer`
 - `/agent support`
 
-Use `/agent` or `/agents` in a repo where the plugin is installed, then select one of the above roles.
+Use `/agent` in this repository, then select one of the above roles.
 
 ## Plugin setup
 
@@ -96,7 +105,10 @@ Then verify it loaded:
 copilot plugin list
 ```
 
+Repository-level custom agent discovery is based on `.github/agents`, so opening Copilot CLI in this repository is what makes the agents appear in `/agent`.
+
 ## Notes
 
 - Reinstall after local changes because plugins are cached.
+- Keep `.github/agents` as the source of truth for Copilot CLI discovery. The top-level `agents/` folder is retained only for plugin packaging compatibility if needed by older flows.
 - Shared skills are still optional and intentionally not added yet because the current prompts are small and role-specific.

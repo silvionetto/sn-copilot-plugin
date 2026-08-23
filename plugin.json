@@ -14,13 +14,13 @@
   "extensions": {
     "com.github.awesome-copilot": {
       "agents": [
-        "./agents/project-manager.agent.md",
-        "./agents/system-analyst.agent.md",
-        "./agents/software-architect.agent.md",
-        "./agents/java-developer.agent.md",
-        "./agents/tester.agent.md",
-        "./agents/platform-engineer.agent.md",
-        "./agents/support.agent.md"
+        "./.github/agents/project-manager.agent.md",
+        "./.github/agents/system-analyst.agent.md",
+        "./.github/agents/software-architect.agent.md",
+        "./.github/agents/java-developer.agent.md",
+        "./.github/agents/tester.agent.md",
+        "./.github/agents/platform-engineer.agent.md",
+        "./.github/agents/support.agent.md"
       ],
       "skills": [
         "./skills"
