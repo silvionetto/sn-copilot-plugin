@@ -26,14 +26,6 @@ sn-copilot-plugin/
 │       ├── tester.agent.md
 │       ├── platform-engineer.agent.md
 │       └── support.agent.md
-├── agents/
-│   ├── project-manager.agent.md
-│   ├── system-analyst.agent.md
-│   ├── software-architect.agent.md
-│   ├── java-developer.agent.md
-│   ├── tester.agent.md
-│   ├── platform-engineer.agent.md
-│   └── support.agent.md
 └── skills/
 ```
 
@@ -73,7 +65,7 @@ Each specialist should hand off a compact result with objective, assumptions, fi
 
 - **Name:** `sn-copilot-plugin`
 - **Description:** Copilot CLI plugin for an AI Squad with specialized agents and shared skills
-- **Version:** `0.1.0`
+- **Version:** `0.1.3`
 - **License:** `UNLICENSED`
 - **Copilot engine:** `>=1.0.0`
 
@@ -110,5 +102,5 @@ Repository-level custom agent discovery is based on `.github/agents`, so opening
 ## Notes
 
 - Reinstall after local changes because plugins are cached.
-- Keep `.github/agents` as the source of truth for Copilot CLI discovery. The top-level `agents/` folder is retained only for plugin packaging compatibility if needed by older flows.
+- Keep `.github/agents` as the source of truth for Copilot CLI discovery.
 - Shared skills are still optional and intentionally not added yet because the current prompts are small and role-specific.
