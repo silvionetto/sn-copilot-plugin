@@ -1,0 +1,16 @@
+.idea/
+*.iml
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Node/package manager artifacts
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Copilot/plugin local artifacts
+.copilot/
