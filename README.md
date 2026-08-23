@@ -7,6 +7,7 @@ Copilot CLI plugin for an **AI Squad** with specialized agents and optional shar
 - **Project Manager** — orchestrates the squad and routes work
 - **System Analyst** — defines requirements and acceptance criteria
 - **Software Architect** — defines solution structure and technical decisions
+- **Security Engineer** — reviews dependency security risk and mitigation options
 - **Java Developer** — implements Spring Boot/backend changes
 - **Tester** — defines and validates quality coverage
 - **Platform Engineer** — handles delivery, runtime, and operations concerns
@@ -22,6 +23,7 @@ sn-copilot-plugin/
 │       ├── project-manager.agent.md
 │       ├── system-analyst.agent.md
 │       ├── software-architect.agent.md
+│       ├── security-engineer.agent.md
 │       ├── java-developer.agent.md
 │       ├── tester.agent.md
 │       ├── platform-engineer.agent.md
@@ -43,9 +45,10 @@ The squad is designed around a **Project Manager-orchestrated** workflow:
 1. Project Manager receives the request and plans the work
 2. System Analyst refines scope, requirements, and acceptance criteria
 3. Software Architect defines the technical approach for non-trivial work
-4. Java Developer and Platform Engineer contribute implementation and delivery guidance
-5. Tester validates coverage and quality expectations
-6. Support is engaged for issue triage and production-oriented requests
+4. Security Engineer assesses dependency and component security risk when relevant
+5. Java Developer and Platform Engineer contribute implementation and delivery guidance
+6. Tester validates coverage and quality expectations
+7. Support is engaged for issue triage and production-oriented requests
 
 Each specialist should hand off a compact result with objective, assumptions, findings, risks, and the recommended next recipient.
 
@@ -56,6 +59,7 @@ Each specialist should hand off a compact result with objective, assumptions, fi
 | Project Manager | Coordination, scope management, sequencing | Any specialist |
 | System Analyst | Requirements, acceptance criteria, constraints | Software Architect, Tester |
 | Software Architect | Architecture, technical decisions, slicing | Java Developer, Platform Engineer |
+| Security Engineer | Dependency security review, vulnerability triage, mitigations | Platform Engineer, Java Developer, Project Manager |
 | Java Developer | Spring Boot/backend implementation guidance | Tester, Project Manager |
 | Tester | Test strategy, validation, quality risks | Project Manager |
 | Platform Engineer | Delivery, runtime, observability, ops | Tester, Project Manager |
@@ -76,6 +80,7 @@ This repo exposes these agents to Copilot CLI through the documented repository-
 - `/agent project-manager`
 - `/agent system-analyst`
 - `/agent software-architect`
+- `/agent security-engineer`
 - `/agent java-developer`
 - `/agent tester`
 - `/agent platform-engineer`
