@@ -68,6 +68,20 @@ Each specialist should hand off a compact result with objective, assumptions, fi
 - **License:** `UNLICENSED`
 - **Copilot engine:** `>=1.0.0`
 
+## Agents
+
+This plugin exposes these agents to Copilot CLI:
+
+- `/agent project-manager`
+- `/agent system-analyst`
+- `/agent software-architect`
+- `/agent java-developer`
+- `/agent tester`
+- `/agent platform-engineer`
+- `/agent support`
+
+Use `/agent` or `/agents` in a repo where the plugin is installed, then select one of the above roles.
+
 ## Plugin setup
 
 Install locally while testing:
