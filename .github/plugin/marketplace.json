@@ -2,7 +2,7 @@
   "name": "sn-copilot-plugin-marketplace",
   "metadata": {
     "description": "Marketplace for the sn-copilot-plugin Copilot CLI plugin",
-    "version": "0.1.12"
+    "version": "0.1.13"
   },
   "owner": {
     "name": "Silvio Netto"
@@ -12,7 +12,7 @@
       "name": "sn-copilot-plugin",
       "source": ".github/plugin",
       "description": "Copilot CLI plugin for an AI Squad with specialized agents and shared skills",
-      "version": "0.1.12",
+      "version": "0.1.13",
       "author": {
         "name": "Silvio Netto"
       },

@@ -9,6 +9,7 @@ This repository is a Copilot CLI plugin that exposes an AI Squad of repository-l
 - `plugin.json` is the root plugin manifest and the source of truth for the plugin name, version, engine requirement, and extension registration.
 - `.github/plugin/plugin.json` is the packaged plugin manifest used by marketplace installs and must stay in sync with `plugin.json`.
 - `agents/*.agent.md` defines the squad roles and their output contracts and must be mirrored under `.github/plugin/agents/`.
+- `com.github.copilot/agents/*.md` and `.github/plugin/com.github.copilot/agents/*.md` are the runtime agent copies that Copilot CLI currently discovers for Agent Plugins v1 manifests and must be kept in sync with `agents/*.agent.md`.
 - `skills/` is reserved for shared prompt logic when multiple agents need the same behavior.
 - `.github/plugin/marketplace.json` publishes the plugin to Copilot CLI marketplace flows.
 
@@ -24,10 +25,11 @@ This repository is a Copilot CLI plugin that exposes an AI Squad of repository-l
 - Keep the squad role boundaries narrow: the Project Manager coordinates, the System Analyst defines requirements, the Software Architect decides structure, the Java Developer handles backend implementation guidance, the Tester owns validation, the Platform Engineer covers delivery/runtime concerns, and Support handles triage.
 - Each specialist should hand off a compact result with objective, assumptions, findings, risks, and the next recipient.
 - Prefer adding shared skills only when multiple agents need the same prompt logic; otherwise keep guidance in the individual agent file.
-- Keep the repository root installable with `plugin.json`, `agents/`, and `skills/` at the top level, and keep `.github/plugin/` as the packaged marketplace subtree.
+- Keep the repository root installable with `plugin.json`, `skills/`, and `com.github.copilot/agents/`, and keep `.github/plugin/` as the packaged marketplace subtree with the same runtime agent layout.
 
 ## Copilot usage notes
 
 - Use `/agent` in this repository to select one of the exposed squad roles.
+- Installed plugin agents are exposed under namespaced IDs such as `sn-copilot-plugin:project-manager`.
 - Opening Copilot CLI in this repo is what makes the repository-level agents available.
 - After local changes, reinstall the plugin because Copilot plugins are cached.

@@ -33,7 +33,9 @@ jobs:
           marketplace_path = root / ".github" / "plugin" / "marketplace.json"
           readme_path = root / "README.md"
           agents_dir = root / "agents"
+          runtime_agents_dir = root / "com.github.copilot" / "agents"
           packaged_agents_dir = root / ".github" / "plugin" / "agents"
+          packaged_runtime_agents_dir = root / ".github" / "plugin" / "com.github.copilot" / "agents"
           skills_dir = root / "skills"
           packaged_skills_dir = root / ".github" / "plugin" / "skills"
 
@@ -110,6 +112,29 @@ jobs:
                   if root_agent != packaged_agent:
                       errors.append(f"Packaged agent content mismatch for {agent_file}")
 
+          runtime_agent_files = sorted(path.name for path in runtime_agents_dir.glob("*.md"))
+          expected_runtime_agent_files = [path.replace(".agent.md", ".md") for path in agent_files]
+          if runtime_agent_files != expected_runtime_agent_files:
+              errors.append("Runtime agents under com.github.copilot/agents must mirror agents/")
+          else:
+              for agent_file in agent_files:
+                  root_agent = (agents_dir / agent_file).read_text(encoding="utf-8")
+                  runtime_agent = (runtime_agents_dir / agent_file.replace(".agent.md", ".md")).read_text(encoding="utf-8")
+                  if root_agent != runtime_agent:
+                      errors.append(f"Runtime agent content mismatch for {agent_file}")
+
+          packaged_runtime_agent_files = sorted(path.name for path in packaged_runtime_agents_dir.glob("*.md"))
+          if packaged_runtime_agent_files != expected_runtime_agent_files:
+              errors.append("Packaged runtime agents under .github/plugin/com.github.copilot/agents must mirror agents/")
+          else:
+              for agent_file in agent_files:
+                  root_agent = (agents_dir / agent_file).read_text(encoding="utf-8")
+                  packaged_runtime_agent = (
+                      packaged_runtime_agents_dir / agent_file.replace(".agent.md", ".md")
+                  ).read_text(encoding="utf-8")
+                  if root_agent != packaged_runtime_agent:
+                      errors.append(f"Packaged runtime agent content mismatch for {agent_file}")
+
           if not skills_dir.exists():
               errors.append("skills/ directory is missing")
 
@@ -141,6 +166,12 @@ jobs:
 
           if "Marketplace installs now point at `.github/plugin`" not in readme:
               errors.append("README.md must explain the packaged marketplace layout")
+
+          if "com.github.copilot/agents" not in readme:
+              errors.append("README.md must document the com.github.copilot/agents runtime path")
+
+          if "sn-copilot-plugin:project-manager" not in readme:
+              errors.append("README.md must document the installed plugin namespace for agent IDs")
 
           if errors:
               for error in errors:
