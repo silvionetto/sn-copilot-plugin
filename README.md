@@ -69,7 +69,7 @@ Each specialist should hand off a compact result with objective, assumptions, fi
 
 - **Name:** `sn-copilot-plugin`
 - **Description:** Copilot CLI plugin for an AI Squad with specialized agents and shared skills
-- **Version:** `0.1.10`
+- **Version:** `0.1.11`
 - **License:** `UNLICENSED`
 - **Copilot engine:** `>=1.0.0`
 
@@ -119,6 +119,8 @@ Then install the plugin from the marketplace using:
 ```shell
 copilot plugin install sn-copilot-plugin@sn-copilot-plugin-marketplace
 ```
+
+The marketplace manifest uses Copilot CLI's required marketplace schema: a top-level marketplace `name`, `owner`, optional `metadata`, and a `plugins` array containing the published plugin entry.
 
 ## Releases
 

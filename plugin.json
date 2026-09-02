@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "sn-copilot-plugin",
   "description": "Copilot CLI plugin for an AI Squad with specialized agents and shared skills",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "type": "module",
   "author": {
     "name": "Silvio Netto"

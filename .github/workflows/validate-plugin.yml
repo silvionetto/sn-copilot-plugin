@@ -39,18 +39,49 @@ jobs:
 
           errors = []
 
-          if plugin.get("version") != marketplace.get("version"):
+          if marketplace.get("name") != "sn-copilot-plugin-marketplace":
               errors.append(
-                  f"Version mismatch: plugin.json={plugin.get('version')} "
-                  f"marketplace.json={marketplace.get('version')}"
+                  f"Unexpected marketplace name: {marketplace.get('name')}"
               )
 
+          marketplace_metadata = marketplace.get("metadata", {})
+          if plugin.get("version") != marketplace_metadata.get("version"):
+              errors.append(
+                  f"Version mismatch: plugin.json={plugin.get('version')} "
+                  f"marketplace metadata={marketplace_metadata.get('version')}"
+              )
+
+          owner = marketplace.get("owner", {})
+          if owner.get("name") != plugin.get("author", {}).get("name"):
+              errors.append("Marketplace owner name must match plugin author name")
+
+          plugins = marketplace.get("plugins")
+          if not isinstance(plugins, list) or len(plugins) != 1:
+              errors.append("marketplace.json must publish exactly one plugin entry")
+              marketplace_plugin = {}
+          else:
+              marketplace_plugin = plugins[0]
+
+          if marketplace_plugin.get("name") != plugin.get("name"):
+              errors.append("Marketplace plugin name must match plugin.json name")
+
+          if marketplace_plugin.get("description") != plugin.get("description"):
+              errors.append("Marketplace plugin description must match plugin.json description")
+
+          if marketplace_plugin.get("version") != plugin.get("version"):
+              errors.append("Marketplace plugin version must match plugin.json version")
+
+          if marketplace_plugin.get("source") != ".":
+              errors.append("Marketplace plugin source must point to the repository root with '.'")
+
+          marketplace_author = marketplace_plugin.get("author", {})
+          if marketplace_author.get("name") != plugin.get("author", {}).get("name"):
+              errors.append("Marketplace plugin author name must match plugin.json author name")
+
+          if marketplace_plugin.get("license") != plugin.get("license"):
+              errors.append("Marketplace plugin license must match plugin.json license")
+
           plugin_extension = plugin.get("extensions", {}).get("com.github.awesome-copilot", {})
-          marketplace_extension = marketplace.get("extensions", {}).get("com.github.awesome-copilot", {})
-
-          if plugin_extension != marketplace_extension:
-              errors.append("Extension registration differs between plugin.json and marketplace.json")
-
           if plugin_extension.get("agents") != ["agents/"]:
               errors.append("plugin.json must register agents/ as the agent discovery path")
 
