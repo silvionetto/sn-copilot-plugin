@@ -6,8 +6,9 @@ This repository is a Copilot CLI plugin that exposes an AI Squad of repository-l
 
 ## How the repo is structured
 
-- `plugin.json` is the plugin manifest and the source of truth for the plugin name, version, engine requirement, and extension registration.
-- `agents/*.agent.md` defines the squad roles and their output contracts.
+- `plugin.json` is the root plugin manifest and the source of truth for the plugin name, version, engine requirement, and extension registration.
+- `.github/plugin/plugin.json` is the packaged plugin manifest used by marketplace installs and must stay in sync with `plugin.json`.
+- `agents/*.agent.md` defines the squad roles and their output contracts and must be mirrored under `.github/plugin/agents/`.
 - `skills/` is reserved for shared prompt logic when multiple agents need the same behavior.
 - `.github/plugin/marketplace.json` publishes the plugin to Copilot CLI marketplace flows.
 
@@ -23,7 +24,7 @@ This repository is a Copilot CLI plugin that exposes an AI Squad of repository-l
 - Keep the squad role boundaries narrow: the Project Manager coordinates, the System Analyst defines requirements, the Software Architect decides structure, the Java Developer handles backend implementation guidance, the Tester owns validation, the Platform Engineer covers delivery/runtime concerns, and Support handles triage.
 - Each specialist should hand off a compact result with objective, assumptions, findings, risks, and the next recipient.
 - Prefer adding shared skills only when multiple agents need the same prompt logic; otherwise keep guidance in the individual agent file.
-- Use `.github/agents/` as the discovery path expected by Copilot CLI.
+- Keep the repository root installable with `plugin.json`, `agents/`, and `skills/` at the top level, and keep `.github/plugin/` as the packaged marketplace subtree.
 
 ## Copilot usage notes
 

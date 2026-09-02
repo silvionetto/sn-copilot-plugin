@@ -29,15 +29,23 @@ jobs:
 
           root = pathlib.Path(".")
           plugin_path = root / "plugin.json"
+          packaged_plugin_path = root / ".github" / "plugin" / "plugin.json"
           marketplace_path = root / ".github" / "plugin" / "marketplace.json"
           readme_path = root / "README.md"
           agents_dir = root / "agents"
+          packaged_agents_dir = root / ".github" / "plugin" / "agents"
+          skills_dir = root / "skills"
+          packaged_skills_dir = root / ".github" / "plugin" / "skills"
 
           plugin = json.loads(plugin_path.read_text(encoding="utf-8"))
+          packaged_plugin = json.loads(packaged_plugin_path.read_text(encoding="utf-8"))
           marketplace = json.loads(marketplace_path.read_text(encoding="utf-8"))
           readme = readme_path.read_text(encoding="utf-8")
 
           errors = []
+
+          if plugin != packaged_plugin:
+              errors.append("plugin.json and .github/plugin/plugin.json must be identical")
 
           if marketplace.get("name") != "sn-copilot-plugin-marketplace":
               errors.append(
@@ -71,8 +79,8 @@ jobs:
           if marketplace_plugin.get("version") != plugin.get("version"):
               errors.append("Marketplace plugin version must match plugin.json version")
 
-          if marketplace_plugin.get("source") != ".":
-              errors.append("Marketplace plugin source must point to the repository root with '.'")
+          if marketplace_plugin.get("source") != ".github/plugin":
+              errors.append("Marketplace plugin source must point to the packaged plugin root '.github/plugin'")
 
           marketplace_author = marketplace_plugin.get("author", {})
           if marketplace_author.get("name") != plugin.get("author", {}).get("name"):
@@ -91,6 +99,22 @@ jobs:
           agent_files = sorted(path.name for path in agents_dir.glob("*.agent.md"))
           if not agent_files:
               errors.append("No agent files found under agents/")
+
+          packaged_agent_files = sorted(path.name for path in packaged_agents_dir.glob("*.agent.md"))
+          if agent_files != packaged_agent_files:
+              errors.append("Packaged agents under .github/plugin/agents must mirror agents/")
+          else:
+              for agent_file in agent_files:
+                  root_agent = (agents_dir / agent_file).read_text(encoding="utf-8")
+                  packaged_agent = (packaged_agents_dir / agent_file).read_text(encoding="utf-8")
+                  if root_agent != packaged_agent:
+                      errors.append(f"Packaged agent content mismatch for {agent_file}")
+
+          if not skills_dir.exists():
+              errors.append("skills/ directory is missing")
+
+          if not packaged_skills_dir.exists():
+              errors.append(".github/plugin/skills/ directory is missing")
 
           missing_agent_commands = []
           for agent_file in agent_files:
@@ -112,13 +136,16 @@ jobs:
                   f"README.md version {version_match.group(1)} does not match plugin.json version {plugin.get('version')}"
               )
 
-          if ".github/agents" not in readme:
-              errors.append("README.md must document .github/agents as the discovery path")
+          if ".github/plugin/plugin.json" not in readme:
+              errors.append("README.md must document the packaged plugin manifest path")
+
+          if "Marketplace installs now point at `.github/plugin`" not in readme:
+              errors.append("README.md must explain the packaged marketplace layout")
 
           if errors:
               for error in errors:
                   print(f"ERROR: {error}")
               sys.exit(1)
 
-          print(f"Validated {len(agent_files)} agents, manifest parity, and README consistency.")
+          print(f"Validated {len(agent_files)} agents, packaged plugin parity, and README consistency.")
           PY

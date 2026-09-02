@@ -18,22 +18,27 @@ Copilot CLI plugin for an **AI Squad** with specialized agents and optional shar
 ```text
 sn-copilot-plugin/
 ├── plugin.json
-├── .github/
-│   └── agents/
-│       ├── project-manager.agent.md
-│       ├── system-analyst.agent.md
-│       ├── software-architect.agent.md
-│       ├── security-engineer.agent.md
-│       ├── java-developer.agent.md
-│       ├── tester.agent.md
-│       ├── platform-engineer.agent.md
-│       └── support.agent.md
-└── skills/
+├── agents/
+│   ├── project-manager.agent.md
+│   ├── system-analyst.agent.md
+│   ├── software-architect.agent.md
+│   ├── security-engineer.agent.md
+│   ├── java-developer.agent.md
+│   ├── tester.agent.md
+│   ├── platform-engineer.agent.md
+│   └── support.agent.md
+├── skills/
+└── .github/
+    └── plugin/
+        ├── marketplace.json
+        ├── plugin.json
+        ├── agents/
+        └── skills/
 ```
 
 ## Implementation guidance
 
-1. Add one `.agent.md` file per role under `.github/agents/`.
+1. Add one `.agent.md` file per role under `agents/`.
 2. Use the Project Manager as the default entry point.
 3. Keep role boundaries narrow so analysis, architecture, implementation, testing, platform, and support stay distinct.
 4. Add shared skills only when multiple agents need the same prompt logic.
@@ -69,7 +74,7 @@ Each specialist should hand off a compact result with objective, assumptions, fi
 
 - **Name:** `sn-copilot-plugin`
 - **Description:** Copilot CLI plugin for an AI Squad with specialized agents and shared skills
-- **Version:** `0.1.11`
+- **Version:** `0.1.12`
 - **License:** `UNLICENSED`
 - **Copilot engine:** `>=1.0.0`
 
@@ -102,11 +107,11 @@ Then verify it loaded:
 copilot plugin list
 ```
 
-Repository-level custom agent discovery is based on `.github/agents`, so opening Copilot CLI in this repository is what makes the agents appear in `/agent`.
+The repository root is kept as a valid direct-install plugin layout, with `plugin.json`, `agents/`, and `skills/` at the top level.
 
 ## Marketplace
 
-This repository now includes a marketplace manifest at `.github/plugin/marketplace.json`.
+This repository includes a marketplace manifest at `.github/plugin/marketplace.json` and a packaged plugin subtree at `.github/plugin/plugin.json`.
 
 You can register it with Copilot CLI using:
 
@@ -122,6 +127,8 @@ copilot plugin install sn-copilot-plugin@sn-copilot-plugin-marketplace
 
 The marketplace manifest uses Copilot CLI's required marketplace schema: a top-level marketplace `name`, `owner`, optional `metadata`, and a `plugins` array containing the published plugin entry.
 
+Marketplace installs now point at `.github/plugin`, which gives Copilot a flattened package root containing `plugin.json`, `agents/`, and `skills/`. That keeps marketplace installs aligned with the packaged layout Copilot expects while the repository root remains usable for local direct installs.
+
 ## Releases
 
 Pushing to `main` now runs `.github/workflows/release.yml`, which reads `plugin.json` and creates a GitHub Release tagged as `v<version>`.
@@ -134,13 +141,14 @@ Pull requests and pushes to `main` now run `.github/workflows/validate-plugin.ym
 
 The workflow verifies:
 
-- `plugin.json` and `.github/plugin/marketplace.json` stay in sync
+- `plugin.json`, `.github/plugin/plugin.json`, and `.github/plugin/marketplace.json` stay in sync
+- every `agents/*.agent.md` file is mirrored into `.github/plugin/agents/*.agent.md`
 - every `agents/*.agent.md` file is documented in the `/agent` list
 - the README manifest version matches `plugin.json`
-- the documented discovery path still references `.github/agents`
+- the README documents the packaged `.github/plugin` layout
 
 ## Notes
 
 - Reinstall after local changes because plugins are cached.
-- Keep `.github/agents` as the source of truth for Copilot CLI discovery.
+- Keep `agents/` as the source of truth and mirror packaged copies under `.github/plugin/agents/`.
 - Shared skills are still optional and intentionally not added yet because the current prompts are small and role-specific.
